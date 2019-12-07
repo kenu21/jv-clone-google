@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,9 +23,16 @@ public class IndexTest {
     private MockMvc mvc;
 
     @Test
-    public void helloGradle() throws Exception {
+    public void indexOk() throws Exception {
         mvc.perform(get("/index"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("index"));
+    }
+
+    @Test
+    public void submitOk() throws Exception {
+        mvc.perform(post("/index/submit?q=http://www.guimp.com/&level=2"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("page2"));
     }
 }

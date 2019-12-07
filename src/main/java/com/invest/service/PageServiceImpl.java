@@ -1,0 +1,37 @@
+package com.invest.service;
+
+import java.io.IOException;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.invest.entities.Page;
+import com.invest.repositories.PageRepository;
+import com.invest.threads.IndexNext;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PageServiceImpl implements PageService {
+    private static final ExecutorService EXECUTOR_SERVICE =
+            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    @Autowired
+    private PageRepository pageRepository;
+
+    @Override
+    public Page index(String uri, int level, Set<String> set) throws IOException {
+        Document doc = Jsoup.connect(uri).get();
+        Page save = pageRepository.save(new Page(uri, doc.title(), doc.body().text()));
+        Elements links = doc.select("a[href]");
+
+        if (level > 0) {
+            level--;
+            EXECUTOR_SERVICE.execute(new IndexNext(set, links, level));
+        }
+        return save;
+    }
+}
