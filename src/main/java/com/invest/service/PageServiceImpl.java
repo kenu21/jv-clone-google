@@ -1,6 +1,7 @@
 package com.invest.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,5 +35,11 @@ public class PageServiceImpl implements PageService {
             EXECUTOR_SERVICE.execute(new IndexNext(set, links, level));
         }
         return save;
+    }
+
+    @Override
+    public List<Page> find(String query, Pageable pageable) {
+        List<Page> allByBody = pageRepository.findAllByBody(query, pageable);
+        return allByBody;
     }
 }

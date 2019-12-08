@@ -48,4 +48,3 @@ buildScan {
 bootJar {
     mainClassName = 'com.invest.Main'
 }
-
