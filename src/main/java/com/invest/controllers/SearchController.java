@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/")
 public class SearchController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class SearchController {
 
     @GetMapping
     public String search() {
-        return "search";
+        return "page3";
     }
 
     @GetMapping("/finded")
